@@ -60,7 +60,7 @@ app.get("/api", async (req, res) => {
       res.send(result);
     })
     .catch(async (err) => {
-      console.log("ERROR");
+      console.log("error");
       await axios
         .get(`https://free-movie-extension.vercel.app/api?moviename=${moviename}`)
         .then((result) => {
