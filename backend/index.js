@@ -62,7 +62,7 @@ app.get("/api", (req, res) => {
     .catch((err) => {
       console.log("ERROR");
       axios
-        .get(`http://anishkprod.ddns.net:81/api?moviename=${moviename}`)
+        .get(`https://free-movie-extension.vercel.app/api?moviename=${moviename}`)
         .then((result) => {
           res.send(result.data);
         });

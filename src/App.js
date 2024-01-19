@@ -50,7 +50,7 @@ function App() {
     }
     // console.log(e.target.value);
     axios
-      .get(`http://anishkprod.ddns.net:81/api?moviename=${moviename}`)
+      .get(`https://free-movie-extension.vercel.app/api?moviename=${moviename}`)
       .then((response) => {
         console.log(response.data);
         setMovies(response.data);
