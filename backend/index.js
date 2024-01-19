@@ -15,11 +15,12 @@ app.use(morgan("combined"));
 
 app.get("");
 
-app.post("/api", (req, res) => {
+app.get("/api", (req, res) => {
   // console.log(req.body.moviename);
+  var moviename = req.query.moviename;
   axios
     .get(
-      `https://yts.mx/api/v2/list_movies.json?query_term=${req.body.moviename}&limit=50`,
+      `https://yts.mx/api/v2/list_movies.json?query_term=${moviename}&limit=50`,
       {
         headers: {
           "User-Agent":
@@ -61,9 +62,7 @@ app.post("/api", (req, res) => {
     .catch((err) => {
       console.log("ERROR");
       axios
-        .post("http://anishkprod.ddns.net:81/api", {
-          moviename: req.body.moviename,
-        })
+        .get(`http://anishkprod.ddns.net:81/api?moviename=${moviename}`)
         .then((result) => {
           res.send(result.data);
         });
@@ -75,3 +74,5 @@ app.post("/api", (req, res) => {
 app.listen(port, "0.0.0.0", () => {
   console.log("Server started");
 });
+
+module.exports = app;
