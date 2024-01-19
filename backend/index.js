@@ -15,10 +15,10 @@ app.use(morgan("combined"));
 
 app.get("");
 
-app.get("/api", (req, res) => {
+app.get("/api", async (req, res) => {
   // console.log(req.body.moviename);
   var moviename = req.query.moviename;
-  axios
+  await axios
     .get(
       `https://yts.mx/api/v2/list_movies.json?query_term=${moviename}&limit=50`,
       {
@@ -59,9 +59,9 @@ app.get("/api", (req, res) => {
       // console.log(result);
       res.send(result);
     })
-    .catch((err) => {
+    .catch(async (err) => {
       console.log("ERROR");
-      axios
+      await axios
         .get(`https://free-movie-extension.vercel.app/api?moviename=${moviename}`)
         .then((result) => {
           res.send(result.data);
