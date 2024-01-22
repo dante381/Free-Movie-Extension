@@ -89,12 +89,12 @@ function App() {
             //   console.log("ENTER");
             //   handleSubmit(e);
             // }}
-            onChangeCapture={async (e) => {
-              // e.preventDefault();
-              // setName(e.target.value);
-              await handleSubmit(e);
-              // console.log(e.target.value);
-            }}
+            // onChangeCapture={async (e) => {
+            //   // e.preventDefault();
+            //   // setName(e.target.value);
+            //   await handleSubmit(e);
+            //   // console.log(e.target.value);
+            // }}
             // value={name}
             className="Search-box"
             name="moviename"
