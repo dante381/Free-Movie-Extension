@@ -80,6 +80,8 @@ a:link, a:visited {
   display: flex;
   align-items: center;
   flex-direction:row;
+  margin-left: 40px;
+  margin-right: 20px;
 
 }
 
@@ -90,6 +92,22 @@ a:link, a:visited {
   padding: 10px;
   /* flex-direction: row; */
   /* flex: 1; */
+}
+
+.qualities{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 30px;
+  gap: 5px;
+}
+
+.text{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes App-logo-spin {
