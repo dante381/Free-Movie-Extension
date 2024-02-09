@@ -4,6 +4,7 @@ const cheerio = require("cheerio");
 const cors = require("cors");
 const pretty = require("pretty");
 const morgan = require("morgan");
+const fs = require("fs");
 
 const app = express();
 const port = 4000;
@@ -18,6 +19,7 @@ app.get("");
 app.get("/api", async (req, res) => {
   // console.log(req.body.moviename);
   var moviename = req.query.moviename;
+
   await axios
     .get(
       `https://yts.mx/api/v2/list_movies.json?query_term=${moviename}&limit=50`,
@@ -44,21 +46,32 @@ app.get("/api", async (req, res) => {
         // console.log(data.data);
         for (var movie in data.data.movies) {
           // console.log(data.data.movies);
-          
           result.push({
             title: data.data.movies[movie].title_english,
-            quality:data.data.movies[movie].torrents,
+            quality:[],
             img: data.data.movies[movie].large_cover_image,
           });
+
+          for(var torrent in data.data.movies[movie].torrents){
+            result[movie].quality.push({url:`magnet:?xt=urn:btih:${
+              data.data.movies[movie].torrents[torrent].hash
+            }&dn=${
+              data.data.movies[movie].title_english
+            }&tr=udp://open.demonii.com:1337/announce&tr=udp://tracker.openbittorrent.com:80&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://glotorrents.pw:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://torrent.gresille.org:80/announce&tr=udp://p4p.arenabg.com:1337&tr=udp://tracker.leechers-paradise.org:6969`,
+          quality:data.data.movies[movie].torrents[torrent].quality,
+          size:data.data.movies[movie].torrents[torrent].size
+          })
+          }
         }
       }
       // console.log(result);
       res.send(result);
     })
     .catch(async (err) => {
-      console.log("error");
+      console.log(err);
       await axios
         .get(`https://free-movie-extension.vercel.app/api?moviename=${moviename}`)
+        // .get(`http://127.0.0.1:4000/api?moviename=${moviename}`)
         .then((result) => {
           res.send(result.data);
         });

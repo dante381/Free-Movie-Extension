@@ -10,7 +10,7 @@ import "./App.css";
 function App() {
   axios.get("");
   const [movies, setMovies] = useState([]);
-  const [name, setName] = useState("");
+  // const [name, setName] = useState("");
 
   const Movielist = () => {
     if (movies.length > 0) {
@@ -74,6 +74,7 @@ function App() {
     // console.log(e.target.value);
     await axios
       .get(`https://free-movie-extension.vercel.app/api?moviename=${moviename}`)
+      // .get(`http://127.0.0.1:4000/api?moviename=${moviename}`)
       .then((response) => {
         console.log(response.data);
         setMovies(response.data);
