@@ -6,11 +6,13 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
 import "./App.css";
+import { CircularProgress } from "@mui/material";
 
 function App() {
   axios.get("");
   const [movies, setMovies] = useState([]);
   const [base64String, setBase64String] = useState("");
+  const [loading,setLoading] = useState(false);
 
   const Movielist = () => {
     if (movies.length > 0) {
@@ -66,6 +68,8 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     var moviename = "";
+    setMovies([]);
+    setLoading(true);
     if (e.target.moviename !== undefined) {
       moviename = e.target.moviename.value;
     } else if (e.target.value !== undefined) {
@@ -73,11 +77,14 @@ function App() {
     }
     // console.log(e.target.value);
     await axios
-      .get(`https://free-movie-extension.vercel.app/api?moviename=${moviename}`)
+      .get(
+        `https://free-movie-extension.vercel.app/api?moviename=${moviename}`
+      )
       // .get(`http://127.0.0.1:4000/api?moviename=${moviename}`)
       .then((response) => {
         console.log(response.data);
         setMovies(response.data);
+        setLoading(false);
       });
   };
   console.log(movies);
@@ -105,7 +112,12 @@ function App() {
           />
         </form>
         <div className="Movies">
-          <Movielist />
+          {loading === true ? (
+            <CircularProgress />
+          ) : (
+            <Movielist />
+          )}
+          {/* <Movielist /> */}
         </div>
       </header>
     </div>
