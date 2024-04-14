@@ -13,6 +13,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan("combined"));
+app.use(express.static('./public'));
 
 app.get("");
 
@@ -22,7 +23,7 @@ app.get("/api", async (req, res) => {
 
   await axios
     .get(
-      `https://yts.mx/api/v2/list_movies.json?query_term=${moviename}&limit=50`,
+      `https://yts.mx/api/v2/list_movies.json?query_term=${moviename}&limit=25`,
       {
         headers: {
           "User-Agent":
@@ -35,7 +36,7 @@ app.get("/api", async (req, res) => {
         },
       }
     )
-    .then((response) => {
+    .then(async (response) => {
       //   const site= cheerio.load(response.data);
       //   console.log(pretty(site.html()));
       // console.log(response.data);
@@ -45,11 +46,54 @@ app.get("/api", async (req, res) => {
       if (data.status === "ok") {
         // console.log(data.data);
         for (var movie in data.data.movies) {
-          // console.log(data.data.movies);
+          console.log(data.data.movies.length);
+          var buffer;
+          // if(!fs.existsSync(`./public/images/${data.data.movies[movie].title_english}.jpg`)){
+            while(true){
+              try{
+                await axios.get(data.data.movies[movie].large_cover_image,
+                  { responseType: 'arraybuffer' },
+                  {
+                    headers: {
+                      "User-Agent":
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/12",
+                      Host: "yts.mx",
+                      Connection: "keep-alive",
+                      "Accept-Encoding": "gzip, deflate, br",
+                      // "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q",
+                      // "Cookie": "eplod=1"
+                      //   'Referer':`https://1337x.st/search/jawan/1/`
+                    },
+                  }
+                )
+                // eslint-disable-next-line no-loop-func
+                .then((res) => {
+                  // console.log(res.data);
+                  // console.log(movie);
+                  // console.log(data.data.movies[movie].title_english);
+                  buffer=res.data.toString("base64");
+                  // console.log(buffer);
+                  // const fileName = data.data.movies[movie].title_english.replace(/[/\-:.*+?^${}()|[\]]/g, '');
+                  // fs.writeFile(`./public/images/${fileName}.jpg`, res.data, (err) => {
+                  //   if (err) throw err;
+                  //   console.log('Image downloaded successfully!');
+                  // });
+                })
+                // .catch((err)=>{
+                //   console.log(err);
+                // });
+                break;
+              }
+              catch(err){
+                console.log("image err");
+              }
+            }
+          // }
+
           result.push({
             title: data.data.movies[movie].title_english,
             quality:[],
-            img: data.data.movies[movie].large_cover_image,
+            img: buffer,
           });
 
           for(var torrent in data.data.movies[movie].torrents){
@@ -68,6 +112,7 @@ app.get("/api", async (req, res) => {
       res.send(result);
     })
     .catch(async (err) => {
+      console.log("movie list error");
       console.log(err);
       await axios
         .get(`https://free-movie-extension.vercel.app/api?moviename=${moviename}`)

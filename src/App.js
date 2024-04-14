@@ -10,7 +10,7 @@ import "./App.css";
 function App() {
   axios.get("");
   const [movies, setMovies] = useState([]);
-  // const [name, setName] = useState("");
+  const [base64String, setBase64String] = useState("");
 
   const Movielist = () => {
     if (movies.length > 0) {
@@ -22,7 +22,7 @@ function App() {
               <div className="Movie">
                 <img
                   className="MovieImage"
-                  src={mov.img}
+                  src={`data:image/jpeg;base64,${mov.img}`}
                   alt={mov.title}
                 />
                 <div classname="text">
