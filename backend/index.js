@@ -102,7 +102,7 @@ app.get("/api", async (req, res) => {
             }&dn=${
               data.data.movies[movie].title_english
             }&tr=udp://open.demonii.com:1337/announce&tr=udp://tracker.openbittorrent.com:80&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://glotorrents.pw:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://torrent.gresille.org:80/announce&tr=udp://p4p.arenabg.com:1337&tr=udp://tracker.leechers-paradise.org:6969`,
-          quality:`${data.data.movies[movie].torrents[torrent].quality} ${data.data.movies[movie].torrents[torrent].type} ${data.data.movies[movie].torrents[torrent].video_codec}`,
+          quality:`${data.data.movies[movie].torrents[torrent].quality} ${data.data.movies[movie].torrents[torrent].type.toUpperCase()}`,
           size:data.data.movies[movie].torrents[torrent].size
           })
           }
